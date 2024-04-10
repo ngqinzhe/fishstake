@@ -2,7 +2,6 @@ package db
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/ngqinzhe/fishstake/dal/model"
 	"go.mongodb.org/mongo-driver/bson"
@@ -41,8 +40,6 @@ func (c *mongoDB) FindQueries(ctx context.Context, options ...*options.FindOptio
 	// find without filters
 	cursor, err := collection.Find(ctx, bson.D{{}}, options...)
 	if err != nil {
-		// TOOD: log
-		fmt.Println("find error", err)
 		return nil, err
 	}
 	queries := []model.Query{}
@@ -50,7 +47,6 @@ func (c *mongoDB) FindQueries(ctx context.Context, options ...*options.FindOptio
 	for cursor.Next(ctx) {
 		var query model.Query
 		if err := cursor.Decode(&query); err != nil {
-			fmt.Println("decode error", err)
 			return nil, err
 		}
 		queries = append(queries, query)
